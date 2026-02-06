@@ -1,0 +1,7 @@
+flask
+langchain
+openai
+pandas
+redis
+langchain-community
+langchain-redis
