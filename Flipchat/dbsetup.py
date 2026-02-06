@@ -1,4 +1,5 @@
 import pandas as pd
+
  
 MAX_TEXT_LENGTH=1000  # Maximum num of text characters to use
  
@@ -50,9 +51,10 @@ product_metadata[0]
 # %%
 import os
 from langchain_openai import OpenAIEmbeddings
-from langchain_community.vectorstores import Chroma
+from langchain_community.vectorstores import Redis
+from langchain_community.vectorstores.redis import RedisVectorStore
 # set your openAI api key as an environment variable
-os.environ['OPENAI_API_KEY'] = "YOUR_API_KEY"
+# os.environ['OPENAI_API_KEY'] = "your_api_key_here"
  
 # data that will be embedded and converted to vectors
 texts = [
@@ -65,9 +67,13 @@ metadatas = list(product_metadata.values())
 # we will use OpenAI as our embeddings provider
 embedding = OpenAIEmbeddings()
  
+index_name = "products"
+redis_url = "redis://localhost:6379"
 # %%
-vectorstore = Chroma.from_texts(
+vectorstore = RedisVectorStore.from_texts(
     texts=texts,
     embedding=embedding,
-    metadatas=metadatas
+    metadatas=metadatas,
+    index_name=index_name,
+    redis_url=redis_url
 )
